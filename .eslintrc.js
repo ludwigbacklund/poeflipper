@@ -5,6 +5,8 @@ module.exports = {
     'prettier',
     'prettier/@typescript-eslint',
     'prettier/react',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended',
   ],
   plugins: ['@typescript-eslint', 'react-hooks', 'react'],
   parserOptions: {
@@ -29,5 +31,7 @@ module.exports = {
     'no-unused-vars': 'warn',
     'react/prop-types': 0,
     'react/react-in-jsx-scope': 0,
+    '@typescript-eslint/ban-ts-ignore': 0,
+    '@typescript-eslint/no-explicit-any': 0,
   },
 };
