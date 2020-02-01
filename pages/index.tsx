@@ -1,30 +1,51 @@
 import styled from 'styled-components';
+import groupBy from 'lodash/groupBy';
 
 import { popularCurrencyCombinations } from '../src/utils/currencies';
 import { Pathway } from '../src/components/Pathway';
 
+const popularCurrencyCombinationsGroupedByCurrency = groupBy(
+  popularCurrencyCombinations,
+  currencyCombo => currencyCombo[1].name,
+);
+
 const Home: React.FC = () => {
   return (
-    <PathwaysGrid>
-      {Object.entries(popularCurrencyCombinations).map(
-        ([currencyCombinationName, [currencyOne, currencyTwo]]) => (
-          <Pathway
-            key={currencyCombinationName}
-            currencyCombinationName={currencyCombinationName}
-            currencyOne={currencyOne}
-            currencyTwo={currencyTwo}
-          />
+    <Pathways>
+      {Object.entries(popularCurrencyCombinationsGroupedByCurrency).map(
+        ([currencyName, currencyCombination]) => (
+          <>
+            <PathwaysGroupHeader>{currencyName}</PathwaysGroupHeader>
+            <PathwaysGroup key={currencyName}>
+              {currencyCombination.map(([currencyOne, currencyTwo]) => (
+                <Pathway
+                  key={currencyOne.shorthand + currencyTwo.shorthand}
+                  currencyOne={currencyOne}
+                  currencyTwo={currencyTwo}
+                />
+              ))}
+            </PathwaysGroup>
+          </>
         ),
       )}
-    </PathwaysGrid>
+    </Pathways>
   );
 };
 
-const PathwaysGrid = styled.div`
-  display: grid;
-  grid-auto-flow: dense;
-  grid-template-columns: repeat(auto-fill, minmax(300px, min-content));
-  grid-gap: 16px;
+const Pathways = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const PathwaysGroupHeader = styled.h1`
+  font-size: 28px;
+  margin: 0 0 8px 0;
+`;
+
+const PathwaysGroup = styled.div`
+  display: flex;
+  margin-bottom: 24px;
+  overflow: auto;
 `;
 
 export default Home;

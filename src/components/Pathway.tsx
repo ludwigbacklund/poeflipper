@@ -8,13 +8,11 @@ const prettifyNumber = (number: number): number =>
   Math.round((number + Number.EPSILON) * 100) / 100;
 
 interface PathwayProps {
-  currencyCombinationName: string;
   currencyOne: Currency;
   currencyTwo: Currency;
 }
 
 export const Pathway: React.FC<PathwayProps> = ({
-  currencyCombinationName,
   currencyOne,
   currencyTwo,
 }) => {
@@ -31,7 +29,10 @@ export const Pathway: React.FC<PathwayProps> = ({
     haveRatio && wantRatio && Math.floor((1 - haveRatio / wantRatio) * 100);
 
   return (
-    <PathwayCard key={currencyCombinationName}>
+    <PathwayCard
+      key={currencyOne.shorthand + currencyTwo.shorthand}
+      order={profitMargin ? -profitMargin : 1000}
+    >
       <PathwayWrapper>
         <Exchange>
           <CurrencyIcon src={currencyOne.iconUrl} /> 1 <Arrow>←</Arrow>
@@ -45,16 +46,24 @@ export const Pathway: React.FC<PathwayProps> = ({
         </Exchange>
       </PathwayWrapper>
       <ProfitMargin>
+        <ProfitLabel>PROFIT</ProfitLabel>
         <span>{profitMargin || '?'}%</span>
       </ProfitMargin>
     </PathwayCard>
   );
 };
 
+interface PathwayCardProps {
+  order: number;
+}
+
 const PathwayCard = styled.div`
   display: flex;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  width: max-content;
+  width: min-content;
+  order: ${({ order }: PathwayCardProps) => order};
+  margin: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 `;
 
 const PathwayWrapper = styled.div`
@@ -79,9 +88,17 @@ const Arrow = styled.span`
 
 const ProfitMargin = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
   font-size: 28px;
   padding: 8px;
   color: white;
   background-color: #81c784;
+  width: 88px;
+`;
+
+const ProfitLabel = styled.span`
+  font-size: 14px;
+  font-weight: bolder;
 `;
