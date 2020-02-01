@@ -143,9 +143,29 @@ export default async (req, res) => {
     },
   } = haveCurrencyTradesResultsJson.result[0];
 
+  const ratio = reverseRatio
+    ? exchange.amount / item.amount
+    : item.amount / exchange.amount;
+
+  if (haveCurrencyTradesResultsJson.result.length > 1) {
+    const {
+      listing: {
+        price: { exchange: secondListingExchange, item: secondListingItem },
+      },
+    } = haveCurrencyTradesResultsJson.result[1];
+
+    const secondListingRatio = reverseRatio
+      ? secondListingExchange.amount / secondListingItem.amount
+      : secondListingItem.amount / secondListingExchange.amount;
+
+    if (Math.abs(secondListingRatio * 2) < Math.abs(ratio)) {
+      return res.status(200).json({
+        ratio: secondListingRatio,
+      });
+    }
+  }
+
   return res.status(200).json({
-    ratio: reverseRatio
-      ? exchange.amount / item.amount
-      : item.amount / exchange.amount,
+    ratio,
   });
 };
