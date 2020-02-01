@@ -13,6 +13,13 @@ const getRandomInt = (min: number, max: number): number => {
 const prettifyNumber = (number: number): number =>
   Math.round((number + Number.EPSILON) * 100) / 100;
 
+const calculateProfitColor = (profitMargin: number) => {
+  if (profitMargin > 30) return '#2e7d32';
+  if (profitMargin > 10) return '#43a047';
+  if (profitMargin > 0) return '#f57f17';
+  return '#f44336';
+};
+
 interface PathwayProps {
   currencyOne: Currency;
   currencyTwo: Currency;
@@ -57,7 +64,11 @@ export const Pathway: React.FC<PathwayProps> = ({
           {wantRatio ? prettifyNumber(wantRatio) : '?'}
         </Exchange>
       </PathwayWrapper>
-      <ProfitMargin>
+      <ProfitMargin
+        backgroundColor={
+          profitMargin ? calculateProfitColor(profitMargin) : '#f44336'
+        }
+      >
         <ProfitLabel>PROFIT</ProfitLabel>
         <span>{profitMargin || '?'}%</span>
       </ProfitMargin>
@@ -92,11 +103,16 @@ const Exchange = styled.div`
 
 const CurrencyIcon = styled.img`
   width: 30px;
+  margin-right: 4px;
 `;
 
 const Arrow = styled.span`
   margin: 0 8px;
 `;
+
+interface ProfitMarginProps {
+  backgroundColor: string;
+}
 
 const ProfitMargin = styled.div`
   display: flex;
@@ -106,7 +122,8 @@ const ProfitMargin = styled.div`
   font-size: 28px;
   padding: 8px;
   color: white;
-  background-color: #81c784;
+  background-color: ${({ backgroundColor }: ProfitMarginProps) =>
+    backgroundColor};
   width: 88px;
 `;
 
