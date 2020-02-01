@@ -4,6 +4,12 @@ import useSWR from 'swr';
 
 import { Currency } from '../utils/currencies';
 
+const getRandomInt = (min: number, max: number): number => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+};
+
 const prettifyNumber = (number: number): number =>
   Math.round((number + Number.EPSILON) * 100) / 100;
 
@@ -18,9 +24,15 @@ export const Pathway: React.FC<PathwayProps> = ({
 }) => {
   const { data: haveData } = useSWR(
     `/api/pathway/${currencyOne.shorthand}/${currencyTwo.shorthand}`,
+    {
+      refreshInterval: getRandomInt(90, 120) * 1000,
+    },
   );
-  const { data: wantData } = useSWR(
+  const {
+    data: wantData,
+  } = useSWR(
     `/api/pathway/${currencyTwo.shorthand}/${currencyOne.shorthand}?reverseRatio=true`,
+    { refreshInterval: getRandomInt(90, 120) * 1000 },
   );
 
   const haveRatio = haveData?.ratio;
