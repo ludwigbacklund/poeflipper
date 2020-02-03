@@ -50,7 +50,7 @@ export const Pathway: React.FC<PathwayProps> = ({
   return (
     <PathwayCard
       key={currencyOne.shorthand + currencyTwo.shorthand}
-      order={profitMargin ? -profitMargin : 1000}
+      order={profitMargin || profitMargin === 0 ? -profitMargin : 1000}
     >
       <PathwayWrapper>
         <Exchange>
@@ -70,7 +70,7 @@ export const Pathway: React.FC<PathwayProps> = ({
         }
       >
         <ProfitLabel>PROFIT</ProfitLabel>
-        <span>{profitMargin || '?'}%</span>
+        <span>{profitMargin || profitMargin === 0 ? profitMargin : '?'}%</span>
       </ProfitMargin>
     </PathwayCard>
   );

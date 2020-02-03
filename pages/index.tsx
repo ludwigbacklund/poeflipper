@@ -3,6 +3,7 @@ import groupBy from 'lodash/groupBy';
 
 import { popularCurrencyCombinations } from '../src/utils/currencies';
 import { Pathway } from '../src/components/Pathway';
+import { Fragment } from 'react';
 
 const popularCurrencyCombinationsGroupedByCurrency = groupBy(
   popularCurrencyCombinations,
@@ -14,7 +15,7 @@ const Home: React.FC = () => {
     <Pathways>
       {Object.entries(popularCurrencyCombinationsGroupedByCurrency).map(
         ([currencyName, currencyCombination]) => (
-          <>
+          <Fragment key={currencyName}>
             <PathwaysGroupHeader>{currencyName}</PathwaysGroupHeader>
             <PathwaysGroup key={currencyName}>
               {currencyCombination.map(([currencyOne, currencyTwo]) => (
@@ -25,7 +26,7 @@ const Home: React.FC = () => {
                 />
               ))}
             </PathwaysGroup>
-          </>
+          </Fragment>
         ),
       )}
     </Pathways>

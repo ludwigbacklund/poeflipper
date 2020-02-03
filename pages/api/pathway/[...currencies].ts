@@ -158,7 +158,13 @@ export default async (req, res) => {
       ? secondListingExchange.amount / secondListingItem.amount
       : secondListingItem.amount / secondListingExchange.amount;
 
-    if (Math.abs(secondListingRatio * 2) < Math.abs(ratio)) {
+    // Check if the first listing is too good to be true, i.e if it is 50% better than the second listing.
+    const firstListingOutOfWhackFactor = secondListingRatio / ratio;
+    if (
+      firstListingOutOfWhackFactor > 2 ||
+      firstListingOutOfWhackFactor < 0.5
+    ) {
+      // If so, send the second listing instead.
       return res.status(200).json({
         ratio: secondListingRatio,
       });
@@ -169,3 +175,11 @@ export default async (req, res) => {
     ratio,
   });
 };
+
+// For debugging purposes
+// if (
+//   (haveCurrency === 'alt' || haveCurrency === 'chaos') &&
+//   (wantCurrency === 'alt' || wantCurrency === 'chaos')
+// ) {
+//   console.log('first ratio:', ratio, 'second ratio:', secondListingRatio);
+// }
