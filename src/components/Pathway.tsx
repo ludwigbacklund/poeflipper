@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import useSWR from 'swr';
 
@@ -42,10 +42,28 @@ export const Pathway: React.FC<PathwayProps> = ({
     { refreshInterval: getRandomInt(90, 120) * 1000 },
   );
 
+  const [showSellAmounts, setShowSellAmounts] = useState(false);
+
   const haveRatio = haveData?.ratio;
   const wantRatio = wantData?.ratio;
   const profitMargin =
     haveRatio && wantRatio && Math.floor((1 - haveRatio / wantRatio) * 100);
+
+  const exchangeOneSellAmount = Math.floor(
+    currencyTwo.preferredSellAmount / haveRatio - 1,
+  );
+  const exchangeTwoSellAmount = Math.floor(
+    currencyTwo.preferredSellAmount / wantRatio + 1,
+  );
+
+  const copyToClipboard = (text: string) => {
+    const dummy = document.createElement('input');
+    document.body.appendChild(dummy);
+    dummy.setAttribute('value', text);
+    dummy.select();
+    document.execCommand('copy');
+    document.body.removeChild(dummy);
+  };
 
   return (
     <PathwayCard
@@ -53,15 +71,43 @@ export const Pathway: React.FC<PathwayProps> = ({
       order={profitMargin || profitMargin === 0 ? -profitMargin : 1000}
     >
       <PathwayWrapper>
-        <Exchange>
-          <CurrencyIcon src={currencyOne.iconUrl} /> 1 <Arrow>←</Arrow>
+        <Exchange
+          onMouseOver={() => setShowSellAmounts(true)}
+          onMouseOut={() => setShowSellAmounts(false)}
+          onClick={() =>
+            copyToClipboard(
+              `~b/o ${exchangeOneSellAmount}/${currencyTwo.preferredSellAmount} ${currencyOne.shorthand}`,
+            )
+          }
+        >
+          <CurrencyIcon src={currencyOne.iconUrl} />{' '}
+          {!haveRatio ? '?' : showSellAmounts ? exchangeOneSellAmount : '1'}
+          <Arrow>←</Arrow>
           <CurrencyIcon src={currencyTwo.iconUrl} />
-          {haveRatio ? prettifyNumber(haveRatio) : '?'}
+          {!haveRatio
+            ? '?'
+            : showSellAmounts
+            ? currencyTwo.preferredSellAmount
+            : prettifyNumber(haveRatio)}{' '}
         </Exchange>
-        <Exchange>
-          <CurrencyIcon src={currencyOne.iconUrl} /> 1<Arrow>→</Arrow>
+        <Exchange
+          onMouseOver={() => setShowSellAmounts(true)}
+          onMouseOut={() => setShowSellAmounts(false)}
+          onClick={() =>
+            copyToClipboard(
+              `~b/o ${currencyTwo.preferredSellAmount}/${exchangeTwoSellAmount} ${currencyTwo.shorthand}`,
+            )
+          }
+        >
+          <CurrencyIcon src={currencyOne.iconUrl} />{' '}
+          {!wantRatio ? '?' : showSellAmounts ? exchangeTwoSellAmount : '1'}
+          <Arrow>→</Arrow>
           <CurrencyIcon src={currencyTwo.iconUrl} />
-          {wantRatio ? prettifyNumber(wantRatio) : '?'}
+          {!wantRatio
+            ? '?'
+            : showSellAmounts
+            ? currencyTwo.preferredSellAmount
+            : prettifyNumber(wantRatio)}{' '}
         </Exchange>
       </PathwayWrapper>
       <ProfitMargin
@@ -99,11 +145,17 @@ const Exchange = styled.div`
   display: flex;
   align-items: center;
   font-size: 24px;
+  cursor: pointer;
+
+  :hover {
+    opacity: 0.5;
+  }
 `;
 
 const CurrencyIcon = styled.img`
   width: 30px;
   margin-right: 4px;
+  pointer-events: none;
 `;
 
 const Arrow = styled.span`

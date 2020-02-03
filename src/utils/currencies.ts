@@ -3,6 +3,7 @@ export interface Currency {
   shorthand: string;
   iconUrl: string;
   minimumStock: number;
+  preferredSellAmount: number;
 }
 
 interface CurrenciesObject {
@@ -16,6 +17,7 @@ export const popularCurrencies: Currency[] = [
     iconUrl:
       'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollSocketLinks.png?&w=1&h=1',
     minimumStock: 50,
+    preferredSellAmount: 30,
   },
   {
     name: 'Chaos Orb',
@@ -23,6 +25,7 @@ export const popularCurrencies: Currency[] = [
     iconUrl:
       'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png?&w=1&h=1',
     minimumStock: 25,
+    preferredSellAmount: 10,
   },
   {
     name: 'Exalted Orb',
@@ -30,6 +33,7 @@ export const popularCurrencies: Currency[] = [
     iconUrl:
       'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyAddModToRare.png?&w=1&h=1',
     minimumStock: 3,
+    preferredSellAmount: 1,
   },
   {
     name: 'Orb of Alteration',
@@ -37,6 +41,7 @@ export const popularCurrencies: Currency[] = [
     iconUrl:
       'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollMagic.png?&w=1&h=1',
     minimumStock: 200,
+    preferredSellAmount: 100,
   },
   {
     name: 'Orb of Alchemy',
@@ -44,6 +49,7 @@ export const popularCurrencies: Currency[] = [
     iconUrl:
       'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyUpgradeToRare.png?&w=1&h=1',
     minimumStock: 75,
+    preferredSellAmount: 40,
   },
   {
     name: 'Chromatic Orb',
@@ -51,13 +57,7 @@ export const popularCurrencies: Currency[] = [
     iconUrl:
       'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollSocketColours.png?&w=1&h=1',
     minimumStock: 100,
-  },
-  {
-    name: "Jeweller's Orb",
-    shorthand: 'jew',
-    iconUrl:
-      'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollSocketNumbers.png?&w=1&h=1',
-    minimumStock: 100,
+    preferredSellAmount: 80,
   },
 ];
 
